@@ -90,9 +90,21 @@
         return blackJackSchema.save(blackJackSchema);
     }
 
+    // result
+
+    module.exports.result = function (req, res) {
+        return blackJackCreateSchema.findOneAndUpdate({'_id':req.body._id},req.body,{new : true}).exec();
+    }
+
     module.exports.updateBlackJack = function (req, res) {
         return blackJackCreateSchema.findOneAndUpdate({'_id':req.body._id},{$push:{moves:req.body.moves}},{new : true}).exec();
     }
+
+    module.exports.popMoves = function (req, res) {
+        return blackJackCreateSchema.findOneAndUpdate({'_id':req.body._id},{$pull:{moves:{_id:req.body.moves[0]._id}}},{new : true}).exec();
+    }
+
+    // popMoves
 
     module.exports.getAllBlackJacks = function () {
         return mongoose.model('blackJack', blackJackSchema, 'blackJack').find({}).exec();

@@ -33,6 +33,18 @@ export class AppService {
           .pipe(catchError(this.handleError));
   }
 
+  popmove(objectData): Observable<any> {
+    const body = objectData;
+    return this._http.post('http://localhost:8080' + '/api/blackJack/' + 'popMoves/', body, this.headers)
+          .pipe(catchError(this.handleError));
+  }
+
+  result(objectData): Observable<any> {
+    const body = objectData;
+    return this._http.post('http://localhost:8080' + '/api/blackJack/' + 'result/', body, this.headers)
+          .pipe(catchError(this.handleError));
+  }
+
   handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
         console.error('An error occurred:', error.error.message);

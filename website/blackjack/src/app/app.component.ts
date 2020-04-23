@@ -26,7 +26,8 @@ export class AppComponent implements OnInit {
   distributerDec: any = [];
   playerCardCount = 0;
   distributerCardCount = 0;
-  gameid:string;
+  gameid: string;
+  popingId:string;
   dec1: any = [
     {
       card: '2',
@@ -290,7 +291,7 @@ export class AppComponent implements OnInit {
     }
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private service:AppService) {
+  constructor(private router: Router, private route: ActivatedRoute, private service: AppService) {
 
   }
 
@@ -301,7 +302,8 @@ export class AppComponent implements OnInit {
       Name: new FormControl(),
       BetAmount: new FormControl()
     });
-
+    this.playerDec= [];
+    this.distributerDec = [];
   }
 
   selectingDecValue() {
@@ -320,7 +322,6 @@ export class AppComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.playerName.value.Name);
     this.displayPlayerName = this.playerName.value.Name;
     this.status = 'play';
 
@@ -362,25 +363,75 @@ export class AppComponent implements OnInit {
         }
       ]
     };
-    console.log(obj);
     this.service.gameStatrted(obj).subscribe(resData => {
       this.gameid = resData.data._id;
     });
+
+    if (this.playerCardCount === 21) {
+      const object = {
+        _id: this.gameid,
+        result: 'Player Win',
+        winnerName: this.playerName.value.Name,
+        playingStatus:"win",
+        winningAmount: this.playerName.value.BetAmount * 2
+      };
+      this.service.result(object).subscribe(responceData => {
+        console.log('winner');
+      });
+      Swal('', 'You Win!', 'success');
+
+      setTimeout(() => {
+
+
+        window.location.reload();
+    }, 3000);
+    } else if (this.playerCardCount > 21) {
+      const object = {
+        _id: this.gameid,
+        result: 'Computer Win',
+        winnerName: "Computer",
+        playingStatus:"win",
+        winningAmount: this.playerName.value.BetAmount * 2
+      };
+      this.service.result(object).subscribe(responceData => {
+        console.log('winner');
+      });
+      Swal('', 'Computer Win!', 'success');
+
+      setTimeout(() => {
+
+
+        window.location.reload();
+    }, 3000);
+    }
   }
 
   doubleDown() {
-    console.log('doubleDown');
     this.displayAll = true;
 
     const selectValue = this.selectingDecValue();
     this.completeDec.pop(selectValue);
     this.playerDec.push(selectValue);
     this.playerCardCount += selectValue.value;
-    console.log(this.playerCardCount);
 
     if (this.playerCardCount > 21) {
-      Swal('20$', 'Computer Win!', 'success');
-      this.displayAll = false;
+    const object = {
+      _id: this.gameid,
+      result: 'Computer Win',
+      winnerName: 'Computer Win',
+      winningAmount: this.playerName.value.BetAmount * 4
+    };
+    this.service.result(object).subscribe(responceData => {
+      console.log('winner');
+    });
+    Swal('', 'Computer Win!', 'success');
+    this.displayAll = false;
+
+    setTimeout(() => {
+
+
+      window.location.reload();
+  }, 3000);
     }
 
     while (this.distributerCardCount < this.playerCardCount && this.playerCardCount <= 21) {
@@ -391,16 +442,64 @@ export class AppComponent implements OnInit {
     }
 
     if (this.distributerCardCount > 21) {
-      Swal('20$', 'You Win!', 'success');
-    } else if (this.distributerCardCount === this.playerCardCount) {
-      Swal('10$', 'Draw!', 'success');
-    } else if (this.distributerCardCount > this.playerCardCount) {
-      Swal('20$', 'Computer Win!', 'success');
-    }
+      const object = {
+        _id: this.gameid,
+        result: 'Player Win',
+        winnerName: this.playerName.value.Name,
+        playingStatus:"win",
+        winningAmount: this.playerName.value.BetAmount * 2
+      };
+      this.service.result(object).subscribe(responceData => {
+        console.log('winner');
+      });
 
-    console.log(this.playerCardCount, this.distributerCardCount);
+      Swal('', 'You Win!', 'success');
+
+      setTimeout(() => {
+
+
+        window.location.reload();
+    }, 3000);
+    } else if (this.distributerCardCount === this.playerCardCount) {
+      const object = {
+        _id: this.gameid,
+        result: 'Draw',
+        winnerName: "None",
+        playingStatus:"Draw",
+        winningAmount: this.playerName.value.BetAmount
+      };
+      this.service.result(object).subscribe(responceData => {
+        console.log('winner');
+      });
+      Swal('', 'Draw!', 'success');
+
+      setTimeout(() => {
+
+
+        window.location.reload();
+    }, 3000);
+    } else if (this.distributerCardCount > this.playerCardCount) {
+      const object = {
+        _id: this.gameid,
+        result: 'Computer Win',
+        winnerName: "Computer Win",
+        playingStatus:"win",
+        winningAmount: this.playerName.value.BetAmount * 2
+      };
+      this.service.result(object).subscribe(responceData => {
+        console.log('winner');
+      });
+      const currentScope = this;
+      Swal('', 'Computer Win!', 'success');
+
+      setTimeout(() => {
+
+
+        window.location.reload();
+    }, 3000);
+    }
     const obj = {
-      '_id':this.gameid,
+      '_id': this.gameid,
       'moves': [
         {
           'players': [
@@ -417,7 +516,6 @@ export class AppComponent implements OnInit {
         }
       ]
     };
-    console.log(obj);
     this.service.pushmove(obj).subscribe(resData => {
       this.gameid = resData.data._id;
     });
@@ -426,7 +524,7 @@ export class AppComponent implements OnInit {
   Surrender() {
     this.displayAll = true;
     const obj = {
-      '_id':this.gameid,
+      '_id': this.gameid,
       'moves': [
         {
           'players': [
@@ -443,24 +541,36 @@ export class AppComponent implements OnInit {
         }
       ]
     };
-    console.log(obj);
     this.service.pushmove(obj).subscribe(resData => {
       this.gameid = resData.data._id;
     });
-    Swal('20$', 'Computer Win!', 'success');
+    const object = {
+      _id: this.gameid,
+      result: 'Computer',
+      playingStatus:"win",
+      winnerName: "Computer Win",
+      winningAmount: this.playerName.value.BetAmount * 2
+    };
+    this.service.result(object).subscribe(responceData => {
+      console.log('winner');
+    });
+    const currentScope = this;
+    Swal('', 'Computer Win!', 'success');
+
+    setTimeout(() => {
+
+
+      window.location.reload();
+  }, 3000);
   }
 
   Hit() {
-    console.log('hit');
-    // this.displayAll = true;
-
     const selectValue = this.selectingDecValue();
     this.completeDec.pop(selectValue);
     this.playerDec.push(selectValue);
     this.playerCardCount += selectValue.value;
-    console.log(this.playerCardCount);
     const obj = {
-      '_id':this.gameid,
+      '_id': this.gameid,
       'moves': [
         {
           'players': [
@@ -477,19 +587,35 @@ export class AppComponent implements OnInit {
         }
       ]
     };
-    console.log(obj);
     this.service.pushmove(obj).subscribe(resData => {
       this.gameid = resData.data._id;
+      this.popingId = resData.data.moves[resData.data.moves.length-1]._id
     });
 
     if (this.playerCardCount > 21) {
+      const object = {
+        _id: this.gameid,
+        result: 'Computer Win',
+        winnerName: "Computer Win",
+        playingStatus:"win",
+        winningAmount: this.playerName.value.BetAmount * 2
+      };
+      this.service.result(object).subscribe(responceData => {
+        console.log('winner');
+      });
       this.displayAll = true;
-      Swal('20$', 'Computer Win!', 'success');
+      const currentScope = this;
+      Swal('', 'Computer Win!', 'success');
+
+      setTimeout(() => {
+        
+
+        window.location.reload();
+    }, 3000);
     }
   }
 
   Stand() {
-    console.log('Stand');
     this.displayAll = true;
 
     while (this.distributerCardCount < this.playerCardCount) {
@@ -500,7 +626,7 @@ export class AppComponent implements OnInit {
     }
 
     const obj = {
-      '_id':this.gameid,
+      '_id': this.gameid,
       'moves': [
         {
           'players': [
@@ -517,24 +643,37 @@ export class AppComponent implements OnInit {
         }
       ]
     };
-    console.log(obj);
     this.service.pushmove(obj).subscribe(resData => {
       this.gameid = resData.data._id;
     });
 
     if (this.distributerCardCount > 21) {
-      Swal('20$', 'You Win!', 'success');
+      const currentScope = this;
+      Swal('', 'You Win!', 'success');
+
+      setTimeout(() => {
+
+
+        window.location.reload();
+    }, 3000);
     } else if (this.distributerCardCount === this.playerCardCount) {
-      Swal('10$', 'Draw!', 'success');
+      Swal('currentScope.playerName.value.BetAmount', 'Draw!', 'success');
+
+      setTimeout(() => {
+
+
+        window.location.reload();
+    }, 3000);
     } else if (this.distributerCardCount > this.playerCardCount) {
-      Swal('20$', 'Computer Win!', 'success');
+      Swal('', 'Computer Win!', 'success');
+
+      setTimeout(() => {
+
+
+        window.location.reload();
+    }, 3000);
     }
 
-  }
-
-  pause() {
-    console.log('pause');
-    this.status = 'pause';
   }
 
   newCard() {
@@ -563,7 +702,6 @@ export class AppComponent implements OnInit {
   }
 
   newCard3() {
-    debugger;
     if (this.distributerDec.length >= 3) {
       return true;
     } else {
@@ -586,5 +724,32 @@ export class AppComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  GoBack() {
+    const obj = {
+      '_id': this.gameid,
+      'moves': [
+        {
+          _id:this.popingId,
+          'players': [
+            {
+              'playerCards': this.playerDec,
+              'playerName': this.displayPlayerName,
+              'moveName': 'goback',
+              'sumOfCards': this.playerCardCount
+            }
+          ],
+          'distributerCards': this.distributerDec,
+          'movetype': 'playerMove',
+          'movePlayer': this.displayPlayerName
+        }
+      ]
+    };
+    this.playerDec.pop(obj.moves[0].players[0].playerCards[obj.moves[0].players[0].playerCards.length-1]);
+    this.completeDec.push(obj.moves[0].players[0].playerCards[obj.moves[0].players[0].playerCards.length-1]);
+    this.service.popmove(obj).subscribe(resData => {
+      this.gameid = resData.data._id;
+    });
   }
 }

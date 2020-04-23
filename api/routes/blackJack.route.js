@@ -8,6 +8,9 @@ var blackJackRouters = (function () {
 
     blackJackRouter.route('/createBlackJack').post(blackJackController.createBlackJack);
     blackJackRouter.route('/pushMoves').post(blackJackController.updateBlackJack);
+    blackJackRouter.route('/popMoves').post(blackJackController.popMoves);
+    blackJackRouter.route('/result').post(blackJackController.result);
+    // 
 
     return blackJackRouter;
 
