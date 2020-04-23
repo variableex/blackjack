@@ -7,7 +7,7 @@ var blackJackRouters = (function () {
         blackJackRouter = express.Router();
 
     blackJackRouter.route('/createBlackJack').post(blackJackController.createBlackJack);
-    
+    blackJackRouter.route('/pushMoves').post(blackJackController.updateBlackJack);
 
     return blackJackRouter;
 

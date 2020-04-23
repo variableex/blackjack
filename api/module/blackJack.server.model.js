@@ -65,9 +65,15 @@
         },
         winnerName: {
             type: String,
+            trim: true
         },
         winningAmount: {
-            type: Number
+            type: Number,
+            trim: true
+        },
+        bettingAmount: {
+            type: Number,
+            trim: true
         },
         playingStatus: {
             type: String,
@@ -76,13 +82,8 @@
         moves: [movesSchema],
     });
 
-    module.exports = mongoose.model('BlackJack', blackJackSchema, 'BlackJack');
-    var blackJackCreateSchema = mongoose.model('BlackJack', blackJackSchema, 'BlackJack');
-
-    module.exports.getBlackJacksByIds = function () {
-        var result = mongoose.model('BlackJack', blackJackSchema, 'BlackJack').find({}).exec();
-        return result
-    };
+    module.exports = mongoose.model('blackJack', blackJackSchema, 'blackJack');
+    var blackJackCreateSchema = mongoose.model('blackJack', blackJackSchema, 'blackJack');
 
     module.exports.createBlackJack = function (req, res) {
         var blackJackSchema = blackJackCreateSchema(req.body);
@@ -90,15 +91,18 @@
     }
 
     module.exports.updateBlackJack = function (req, res) {
-        return blackJackCreateSchema.findOneAndUpdate({'_id':req._id},{$set:req},{new : true}).exec();
+        return blackJackCreateSchema.findOneAndUpdate({'_id':req.body._id},{$push:{moves:req.body.moves}},{new : true}).exec();
     }
 
     module.exports.getAllBlackJacks = function () {
-        
-        return mongoose.model('BlackJack', blackJackSchema, 'BlackJack').find({}).exec();
+        return mongoose.model('blackJack', blackJackSchema, 'blackJack').find({}).exec();
     };
 
+    module.exports.pushMoves = function () {
+        return blackJackSchema.findOneAndUpdate({'_id':requestObjectId},{$push:{likes:req.body.likes}}).exec();
+    }
+
     module.exports.getBlackJackById = function (req, res) {
-        return mongoose.model('BlackJack', blackJackSchema, 'BlackJack').find({_id:req._id}).exec();
+        return mongoose.model('blackJack', blackJackSchema, 'blackJack').find({_id:req._id}).exec();
     };
 })();

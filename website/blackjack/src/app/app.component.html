@@ -1,21 +1,227 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
-<router-outlet></router-outlet>
+<div style="height: 50rem; width: 100%; background: gray;     padding: 80px;">
+  <div class="container">
+    <div class="row" style="padding: 50px; background: rgb(0, 65, 0);">
+      <div class="col-md-5">
+        <div style="height: 200px; width: 150px; background: white;
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 10px;" *ngIf="status == 'play'">
+        <b>
+          {{distributerDec[0].card}}
+        </b>
+          {{distributerDec[0].type}}
+        </div>
+
+        <div style="height: 200px; width: 150px; background: white; top: -170px;
+        position: relative;
+        left: 40px;
+        border: 1px solid;
+        border-radius: 10px;" *ngIf="status == 'play' && displayAll">
+        <b>
+          {{distributerDec[1].card}}
+        </b>
+          {{distributerDec[1].type}}
+        </div>
+
+        <div style="height: 200px; width: 150px; background: white; top: -340px;
+        position: relative;
+        left: 80px;
+        border: 1px solid;
+        border-radius: 10px;" *ngIf="status == 'play' && displayAll && newCard3()">
+        <b *ngIf='distributerDec[2]'>
+          {{distributerDec[2].card}}
+        </b>
+        <i *ngIf='distributerDec[2]'>
+          {{distributerDec[2].type}}
+        </i>
+
+        </div>
+
+        <div style="height: 200px; width: 150px; background: white; top: -510px;
+        position: relative;
+        left: 120px;
+        border: 1px solid;
+        border-radius: 10px;" *ngIf="status == 'play' && displayAll && newCard2()">
+        <b *ngIf='distributerDec[3]'>
+          {{distributerDec[3].card}}
+        </b>
+        <i *ngIf='distributerDec[3]'>
+          {{distributerDec[3].type}}
+        </i>
+
+        </div>
+        <div style="height: 200px; width: 150px; background: white; top: -680px;
+        position: relative;
+        left: 160px;
+        border: 1px solid;
+        border-radius: 10px;" *ngIf="status == 'play' && displayAll && newCard5()">
+        <b *ngIf='distributerDec[4]'>
+          {{distributerDec[4].card}}
+        </b>
+        <i *ngIf='distributerDec[4]'>
+          {{distributerDec[4].type}}
+        </i>
+
+        </div>
+
+        <img src="https://i.stack.imgur.com/Zk3YO.jpg" alt="" style="height: 200px; width: 150px; background: white; top: -170px;
+        position: relative;
+        left: 40px;
+        border: 1px solid;
+        border-radius: 10px;" *ngIf="status == 'play' && !displayAll">
+      </div>
+      <div class="col-md-2">
+        <div style="height: 100px; width: 60px; background: white;
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 10px;
+        background: gray;">
+
+        </div>
+        <img src="https://i.stack.imgur.com/Zk3YO.jpg" alt=""  style="height: 100px; width: 60px; background: white; top: -95px;
+        position: relative;
+        left: 5px;
+        border: 1px solid;
+        border-radius: 10px;">
+        <img src="https://i.stack.imgur.com/Zk3YO.jpg" alt=""  style="height: 100px; width: 60px; background: white; top: -90px;
+        position: relative;
+        left: -50px;
+        border: 1px solid;
+        border-radius: 10px;">
+        <form [formGroup]="playerName">
+          <input type="text" style="width: 200px;position: relative;
+          top: -40px;
+          left: -50px; text-align: center;" placeholder="Player Name" formControlName="Name" *ngIf="status != 'play'">
+          <input type="text" formControlName="BetAmount" style="width: 200px;position: relative;
+          top: -35px;
+          left: -50px; text-align: center;" placeholder="Enter Amount">
+
+          <label style="width: 200px;position: relative;
+          top: -40px;
+          left: -50px; text-align: center; color: white;" *ngIf="status == 'play'">{{displayPlayerName}}</label>
+        </form>
+        <button style="width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: green;
+        border: 1px solid greenyellow;" (click)="submit()" *ngIf="status != 'play'">Play</button>
+        <button style="width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: green;
+        border: 1px solid greenyellow;" (click)="pause()" *ngIf="status == 'play'">Pause</button>
+
+        <button style="width: 50px;
+        position: relative;
+        height: 50px;
+        top: 20px;
+        left: 25px;
+        border-radius: 50%;
+        background: rgb(189, 67, 22);
+        border: 1px solid rgb(255, 113, 47);" (click)="pause()" *ngIf="status == 'play'">Back</button>
+      </div>
+      <div class="col-md-5" style="position: absolute;
+      left: 1000px;" *ngIf="status == 'play'">
+        <div style="height: 200px; width: 150px; background: white;
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 10px;">
+        <b>
+          {{playerDec[0].card}}
+        </b>
+          {{playerDec[0].type}}
+        </div>
+        <div style="height: 200px; width: 150px; background: white; top: -170px;
+        position: relative;
+        left: 40px;
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 10px;" *ngIf="status == 'play'">
+        <b>
+          {{playerDec[1].card}}
+        </b>
+          {{playerDec[1].type}}
+        </div>
+        <div style="height: 200px; width: 150px; background: white; top: -340px;
+        position: relative;
+        left: 80px;
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 10px;" *ngIf="status == 'play' && newCard()">
+        <b *ngIf='playerDec[2]'>
+          {{playerDec[2].card}}
+        </b>
+        <i *ngIf='playerDec[2]'>
+          {{playerDec[2].type}}
+        </i>
+
+        </div>
+        <div style="height: 200px; width: 150px; background: white; top: -500px;
+        position: relative;
+        left: 120px;
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 10px;" *ngIf="status == 'play' && newCard1()">
+        <b *ngIf='playerDec[2]'>
+          {{playerDec[3].card}}
+        </b>
+        <i *ngIf='playerDec[2]'>
+          {{playerDec[3].type}}
+        </i>
+        </div>
+        <div style="height: 200px; width: 150px; background: white; top: -660px;
+        position: relative;
+        left: 160px;
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 10px;" *ngIf="status == 'play' && newCard11()">
+        <b *ngIf='playerDec[2]'>
+          {{playerDec[3].card}}
+        </b>
+        <i *ngIf='playerDec[2]'>
+          {{playerDec[3].type}}
+        </i>
+        </div>
+        <button style="width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: orange;
+            border: 1px solid indianred;
+            position: absolute;
+            top: 300px;" (click)="Stand()">
+          Stand
+        </button>
+        <button style="width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: green;
+            border: 1px solid greenyellow;
+            position: absolute;
+            top: 310px;
+            left: 100px;" (click)="Hit()">
+          Hit
+        </button>
+        <button style="width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: red;
+            border: 1px solid rgb(124, 0, 0);
+            position: absolute;
+            top: 290px;
+            left: 170px;" (click)="Surrender()">
+          Surrender
+        </button>
+        <button style="width: 200px;
+            border-radius: 5px;
+            background: darkolivegreen;
+            border: 1px solid greenyellow;
+            position: absolute;
+            top: 390px;
+            left: 40px;" (click)="doubleDown()">
+          Double Down
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

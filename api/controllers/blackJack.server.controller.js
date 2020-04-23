@@ -9,43 +9,30 @@ var blackJackController = (function () {
 
     var _p = BlackJackModule.prototype;
 
-    _p.findBlackJackEmail = function (req, res) {
-        BlackJack.findBlackJackEmail(req, res).then(resData =>{
-            res.status(200).json({
-                status: true,
-                message: "BlackJack Info",
-                data: resData.length,
-            });
-        })
-        .catch(err => {
-            res.status(500).json({
-              error: err,
-              status: false
-            })
-          })
-    }
+
 
     _p.updateBlackJack = function (req, res) {
-        BlackJack.updateBlackJack(req.body,res).then(resData => {
+        BlackJack.updateBlackJack(req, res).then(resData => {
             res.status(200).json({
-                status: true,
-                message: "Details Updated Successfully",
+                status:true,
+                message:"player Move saved Successfully",
                 data: resData
-            });
-        })
-        .catch(err => {
-            res.status(500).json({
-              error: err,
-              status: false
             })
-          })
+        }).catch(err => {
+            res.status(500).json({
+                error:err,
+                status:false,
+                message:"Somting Bad Happned"
+            })
+        })
     }
 
     _p.createBlackJack = function (req, res) {
         BlackJack.createBlackJack(req,res).then(resData => {
             res.status(200).json({
                 status: true,
-                message: "BlackJack Created Successfully"
+                message: "BlackJack Created Successfully",
+                data: resData
             });
         })
         .catch(err => {
@@ -58,12 +45,8 @@ var blackJackController = (function () {
     };
 
     return {
-        getBlackJackLogin:_p.getBlackJackLogin,
-        getBlackJackInfo:_p.getBlackJackInfo,
-        updateBlackJack:_p.updateBlackJack,
         createBlackJack:_p.createBlackJack,
-        findBlackJackName:_p.findBlackJackName,
-        findBlackJackEmail:_p.findBlackJackEmail
+        updateBlackJack:_p.updateBlackJack
     };
 })();
 
