@@ -489,7 +489,7 @@ export class AppComponent implements OnInit {
       this.service.result(object).subscribe(responceData => {
         console.log('winner');
       });
-      const currentScope = this;
+
       Swal('', 'Computer Win!', 'success');
 
       setTimeout(() => {
@@ -554,7 +554,7 @@ export class AppComponent implements OnInit {
     this.service.result(object).subscribe(responceData => {
       console.log('winner');
     });
-    const currentScope = this;
+
     Swal('', 'Computer Win!', 'success');
 
     setTimeout(() => {
@@ -604,11 +604,11 @@ export class AppComponent implements OnInit {
         console.log('winner');
       });
       this.displayAll = true;
-      const currentScope = this;
+      
       Swal('', 'Computer Win!', 'success');
 
       setTimeout(() => {
-        
+
 
         window.location.reload();
     }, 3000);
@@ -648,7 +648,7 @@ export class AppComponent implements OnInit {
     });
 
     if (this.distributerCardCount > 21) {
-      const currentScope = this;
+
       Swal('', 'You Win!', 'success');
 
       setTimeout(() => {
@@ -657,7 +657,7 @@ export class AppComponent implements OnInit {
         window.location.reload();
     }, 3000);
     } else if (this.distributerCardCount === this.playerCardCount) {
-      Swal('currentScope.playerName.value.BetAmount', 'Draw!', 'success');
+      Swal('', 'Draw!', 'success');
 
       setTimeout(() => {
 
